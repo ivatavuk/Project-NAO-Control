@@ -20,12 +20,14 @@ else:
 
 
 print "================ Choregraphe's Initialization ================"
-print 'Enter your NAO IP'
-naoIP = raw_input()
+#print 'Enter your NAO IP'
+#naoIP = raw_input()
+naoIP = "127.0.0.1"
 #naoIP = map(str,naoIP.split())
-print 'Enter your NAO port'
-naoPort = raw_input()
-naoPort=int(naoPort)
+#print 'Enter your NAO port'
+#naoPort = raw_input()
+naoPort = 9559
+#naoPort=int(naoPort)
 #naoPort = map(int,naoPort.split())
 
 motionProxy = ALProxy("ALMotion",naoIP, naoPort)
