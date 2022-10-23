@@ -5,7 +5,7 @@
 #For more informations please check : http://www.coppeliarobotics.com/helpFiles/en/apiFunctions.htm
 import vrep,sys
 from naoqi import ALProxy
-from manage_joints import get_first_handles,JointControl
+from manage_joints import get_first_handles,CustomJointControl
 
 print '================ Program Sarted ================'
 
@@ -32,6 +32,7 @@ naoPort = 9559
 
 motionProxy = ALProxy("ALMotion",naoIP, naoPort)
 postureProxy = ALProxy("ALRobotPosture", naoIP, naoPort)
+memoryProxy = ALProxy("ALMemory", naoIP, naoPort)
 
 #Go to the posture StandInitZero
 posture = 'StandZero'
@@ -52,6 +53,27 @@ print "================ Handles Initialization ================"
 commandAngles = motionProxy.getAngles('Body', False)
 print '========== NAO is listening =========='
 
-JointControl(clientID,motionProxy,0,Body)
-    
+err,data_gyro = vrep.simxGetObjectHandle(clientID,'imported_part_20_sub0',vrep.simx_opmode_oneshot_wait)
+err,data_LFsrFL = vrep.simxGetObjectHandle(clientID,'NAO_LFsrFL',vrep.simx_opmode_oneshot_wait)
+err,data_LFsrFR = vrep.simxGetObjectHandle(clientID,'NAO_LFsrFR',vrep.simx_opmode_oneshot_wait)
+err,data_LFsrRL = vrep.simxGetObjectHandle(clientID,'NAO_LFsrRL',vrep.simx_opmode_oneshot_wait)
+err,data_LFsrRR = vrep.simxGetObjectHandle(clientID,'NAO_LFsrRR',vrep.simx_opmode_oneshot_wait)
+err,data_RFsrFL = vrep.simxGetObjectHandle(clientID,'NAO_RFsrFL',vrep.simx_opmode_oneshot_wait)
+err,data_RFsrFR = vrep.simxGetObjectHandle(clientID,'NAO_RFsrFR',vrep.simx_opmode_oneshot_wait)
+err,data_RFsrRL = vrep.simxGetObjectHandle(clientID,'NAO_RFsrRL',vrep.simx_opmode_oneshot_wait)
+err,data_RFsrRR = vrep.simxGetObjectHandle(clientID,'NAO_RFsrRR',vrep.simx_opmode_oneshot_wait)
+
+memoryProxy.insertData("ankle_pitch_stiff", 1.0)
+memoryProxy.insertData("ankle_roll_stiff", 1.0)
+memoryProxy.insertData("hip_pitch_stiff", 1.0)
+memoryProxy.insertData("hip_roll_stiff", 1.0)
+memoryProxy.insertData("LFsrFL", 0.0)
+memoryProxy.insertData("LFsrFR", 0.0)
+memoryProxy.insertData("LFsrRL", 0.0)
+memoryProxy.insertData("LFsrRR", 0.0)
+memoryProxy.insertData("RFsrFL", 0.0)
+memoryProxy.insertData("RFsrFR", 0.0)
+memoryProxy.insertData("RFsrRL", 0.0)
+memoryProxy.insertData("RFsrRR", 0.0)
+CustomJointControl(clientID,motionProxy,memoryProxy,0,Body,data_gyro,data_LFsrFL,data_LFsrFR,data_LFsrRL,data_LFsrRR,data_RFsrFL,data_RFsrFR,data_RFsrRL,data_RFsrRR)
 
